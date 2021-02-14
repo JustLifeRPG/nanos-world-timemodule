@@ -47,19 +47,23 @@ function NextMinute (delay_ms)
 
 		if (serverTime["hour"] >= nightStartHour and isDayTime) then
 			-- its Night
+			Events:Call("NightStart", {})
 			isDayTime = false
 			serverTime["factor"] = timeFactorNight
 			ResetTimeMaster()
 		elseif (serverTime["hour"] >= nightEndHour and serverTime["hour"] < nightStartHour and not isDayTime) then
 			-- its Day
+			Events:Call("DayStart", {})
 			isDayTime = true
 			serverTime["factor"] = timeFactorDay
 			ResetTimeMaster()
 		end
 end
 
-function BroadcastTimeSync() 
-	Events:BroadcastRemote("UpdateClientTime", {JSON.stringify(serverTime)})
+function BroadcastTimeSync()
+	local timePackage = JSON.stringify(serverTime)
+	Events:BroadcastRemote("UpdateClientTime", {timePackage})
+	Events:Call("UpdateTime", {timePackage})
 end
 
 function ResetTimeMaster()
