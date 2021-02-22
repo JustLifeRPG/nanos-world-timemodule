@@ -23,7 +23,7 @@ local timeMaster
 local syncTimer
 
 -- When package loads start the Timers
-Package:on(
+Package:Subscribe(
 	"Load",
 	function()
 		timeMaster = Timer:SetTimeout(60000 / serverTime["factor"], NextMinute) -- Add Minutes in given interval
@@ -73,12 +73,12 @@ function ResetTimeMaster()
 end
 
 -- a Time Sync Request from a Player
-Events:on("TimeSyncRequest", function(player)
+Events:Subscribe("TimeSyncRequest", function(player)
     Events:CallRemote("UpdateClientTime", player, {JSON.stringify(serverTime)})
 end)
 
 -- a few Console Commands to control server time
-Server:on("Console", function(input)
+Server:Subscribe("Console", function(input)
 	local cmd = string.lower(input)
 	if (cmd == "time") then
 		local hourTxt = serverTime["hour"]

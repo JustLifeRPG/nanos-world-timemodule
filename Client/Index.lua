@@ -4,11 +4,11 @@
 
 World:SpawnDefaultSun()
 
-Player:on("Spawn", function(player)
+Player:Subscribe("Spawn", function(player)
 	Events:CallRemote("TimeSyncRequest", {})
 end)
 
-Events:on("UpdateClientTime", function(data)
+Events:Subscribe("UpdateClientTime", function(data)
     -- Package:Log("Got Time Package from Server: ".. data)
 	local timeData = JSON.parse(data)
 	World:SetTime(timeData["hour"], timeData["minute"])
